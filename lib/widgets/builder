@@ -1,0 +1,35 @@
+class NewsListViewBilder extends StatefulWidget {
+  const NewsListViewBilder({
+    super.key,
+  });
+
+  @override
+  State<NewsListViewBilder> createState() => _NewsListViewBilderState();
+}
+
+class _NewsListViewBilderState extends State<NewsListViewBilder> {
+  List<ArticleModel> articles = [];
+  bool isloading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    GetGenralNews();
+  }
+
+  Future<void> GetGenralNews() async {
+    articles = await NewsService(Dio()).getNews();
+    isloading = false;
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isloading
+        ? SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()))
+        : NewsListView(
+            articles: articles,
+          );
+  }
+}
